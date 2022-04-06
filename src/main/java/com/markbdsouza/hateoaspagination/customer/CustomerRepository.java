@@ -3,6 +3,7 @@ package com.markbdsouza.hateoaspagination.customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,12 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Page<Customer> findAllByFirstNameContainingAndLastNameContaining(String firstNameFilter, String  lastNameFilter, Pageable pageable);
+    String FILTER_CUSTOMERS_ON_FIRST_NAME_AND_LAST_NAME_QUERY = "select b from Customer b where b.firstName like CONCAT('%',?1,'%') and b.lastName like CONCAT('%',?2,'%')";
 
-    List<Customer> findAllByFirstNameContainingAndLastNameContaining(String firstNameFilter, String  lastNameFilter);
+    @Query(FILTER_CUSTOMERS_ON_FIRST_NAME_AND_LAST_NAME_QUERY)
+    Page<Customer> findByFirstNameLikeAndLastNameLike(String firstNameFilter, String lastNameFilter, Pageable pageable);
+
+
+    @Query(FILTER_CUSTOMERS_ON_FIRST_NAME_AND_LAST_NAME_QUERY)
+    List<Customer> findByFirstNameLikeAndLastNameLike(String firstNameFilter, String lastNameFilter);
 }

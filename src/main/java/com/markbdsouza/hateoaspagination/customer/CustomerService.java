@@ -10,30 +10,37 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class CustomerService {
+
     @Autowired
     private CustomerRepository customerRepository;
 
-    public List<Customer> fetchCustomerList() {
+    public List<Customer> fetchCustomerDataAsList() {
+        // Fetch all customers using findAll
         return customerRepository.findAll();
     }
 
-    public List<Customer> fetchCustomerListFiltered(String firstNameFilter, String lastNameFilter) {
-        return customerRepository.findAllByFirstNameContainingAndLastNameContaining(firstNameFilter, lastNameFilter);
+    public List<Customer> fetchFilteredCustomerDataAsList(String firstNameFilter, String lastNameFilter) {
+        // Apply the filter for firstName and lastName
+        return customerRepository.findByFirstNameLikeAndLastNameLike(firstNameFilter, lastNameFilter);
     }
 
-    public Page<Customer> fetchCustomers(String firstNameFilter, String lastNameFilter, int page, int size) {
+    public Page<Customer> fetchCustomerDataAsPageWithFiltering(String firstNameFilter, String lastNameFilter, int page, int size) {
+        // create Pageable object using the page and size
         Pageable pageable = PageRequest.of(page, size);
-        Page<Customer> customerPage = customerRepository.findAllByFirstNameContainingAndLastNameContaining(firstNameFilter, lastNameFilter, pageable);
-        return customerPage;
+        // fetch the page object by additionally passing pageable with the filters
+        return customerRepository.findByFirstNameLikeAndLastNameLike(firstNameFilter, lastNameFilter, pageable);
     }
 
-    public Page<Customer> fetchCustomersSorted(String firstName, String lastName, int page, int size, List<String> sortList) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, null)));
-        Page<Customer> customerPage = customerRepository.findAllByFirstNameContainingAndLastNameContaining(firstName, lastName, pageable);
-        return customerPage;
+    public Page<Customer> fetchCustomerDataAsPageWithFilteringAndSorting(String firstNameFilter, String lastNameFilter, int page, int size, List<String> sortList, String sortOrder) {
+        // create Pageable object using the page, size and sort details
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        // fetch the page object by additionally passing pageable with the filters
+        return customerRepository.findByFirstNameLikeAndLastNameLike(firstNameFilter, lastNameFilter, pageable);
     }
+
 
     private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
         List<Sort.Order> sorts = new ArrayList<>();
@@ -48,4 +55,5 @@ public class CustomerService {
         }
         return sorts;
     }
+
 }

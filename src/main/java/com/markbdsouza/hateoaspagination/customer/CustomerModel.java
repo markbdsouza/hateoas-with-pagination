@@ -2,6 +2,10 @@ package com.markbdsouza.hateoaspagination.customer;
 
 import org.springframework.hateoas.RepresentationModel;
 
+/**
+ * The CustomerModel class extends the Hateoas Representation Model and is required if we want to convert the Customer
+ * Entity to a pagination format
+ */
 public class CustomerModel extends RepresentationModel<CustomerModel> {
     private Long id;
     private String customerId;
