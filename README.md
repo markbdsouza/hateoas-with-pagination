@@ -93,7 +93,7 @@ Alternative Test Urls:
 http://localhost:8080/api/v1/customers?firstNameFilter=Roscoe
 http://localhost:8080/api/v1/customers?lastNameFilter=Ab
 
-### Endpoint 3: As a filtered and sorted List
+### Endpoint 3: Filtered in page format(without hateoas and links to other pages)
 Request Type: GET
 Request Url: http://localhost:8080/api/v2/customers?firstNameFilter=A&lastNameFilter=S&page=0&size=30
 Description:  This url returns the customers of the specified page with the specified size, after applying filter conditions to first name and last name.
